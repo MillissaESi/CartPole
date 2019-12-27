@@ -1,6 +1,18 @@
 import numpy as np
 import gym
 
+
+
+"""
+    Global variables 
+"""
+nval = 6 # number of values for each observation variable
+N = nval ** 4  # total number of states
+A = (0,1) # actions
+episodes = 100 #total number of episodes to play
+env = gym.make('CartPole-v1') # create cart pole environment
+gam = 0.5
+epl = 0.5
 '''
   The presentation of the different states 
 '''
@@ -23,15 +35,65 @@ def observation_vers_etat(observation):
 '''
 
 
+def MonteCarlo_OnPolicy_FirstVisit():
+    """
+    Monte carlo algorithm with On-policy - First visit
+    :return: the average number of iterations per episode
+    """
+    '''
+        initialize Occ(s,a) : how many times we visited (s,a) (first iteration)
+        initialize Q(s,a): the value function for (s,a)
+        initialize Acc(s,a): reward function
+        initialize p(s,a): politic 
+        initialize episode : visited states 
+        
+    '''
+    Occ, Q, Acc, p = {}, {}, {}, {}
+    for i in range(episodes):
+        '''
+            play an episode 
+        '''
+        episode = []
+        nbIt = 0
+        done = False
+        observation = env.reset() # reset all variables to the initial state
+        while not done:
+            s = observation_vers_etat(observation)
+            if (s,0) not in p:
+                p[(s, 0)], p[(s, 1)] = np.random.rand(1)[0], 1 - np.random.rand(1)[0]
+            alt = np.random.rand(1)[0]
+            a = 0 if alt <= p[(s,0)] else 1
+            observation, reward, done, info = env.step(a)
+            episode.append((s,a))
+            env.render()
+            nbIt += 1
+        print("Episode ", i, " terminé après itérations".format(nbIt))
+        state_visited = set()
+        for t in range(len(episode)):
+            item = episode[t]
+            if item not in state_visited:
+                state_visited.add(item)
+                G = (1- gam ** (nbIt - t)) / (1 - gam)
+                Acc[item] = G if item not in Acc else Acc[item] + G
+                Occ[item] = 1 if item not in Occ else Occ[item] + 1
+                Q[item] = Acc[item] / Occ[item]
+        for state, action in state_visited:
+            best_a_state = 0 if Q[(state,0)] > Q[(state,1)] else 1
+            for action in A:
+                p[(state,action)] = 1 - epl + epl / 2 if best_a_state == action else epl / 2
 
 
 
 
 
-nval = 6 # number of values for each observation variable
-N= nval ** 4  # total number of states
-env = gym.make('CartPole-v1')
-env.reset()
+
+
+
+
+
+
+
+
 nbIt=0
 done=False
 while not done:
