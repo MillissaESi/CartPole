@@ -12,7 +12,7 @@ A = (0,1) # actions
 episodes = 100 #total number of episodes to play
 env = gym.make('CartPole-v1') # create cart pole environment
 gam = 0.5
-epl = 0.5
+epl = 0.1
 '''
   The presentation of the different states 
 '''
@@ -67,7 +67,7 @@ def MonteCarlo_OnPolicy_FirstVisit():
             episode.append((s,a))
             env.render()
             nbIt += 1
-        print("Episode ", i, " terminé après itérations".format(nbIt))
+        print("Episode ", i, " terminé après itérations ", nbIt)
         state_visited = set()
         for t in range(len(episode)):
             item = episode[t]
@@ -78,27 +78,22 @@ def MonteCarlo_OnPolicy_FirstVisit():
                 Occ[item] = 1 if item not in Occ else Occ[item] + 1
                 Q[item] = Acc[item] / Occ[item]
         for state, action in state_visited:
-            best_a_state = 0 if Q[(state,0)] > Q[(state,1)] else 1
-            for action in A:
+            best_a_state = 0 if ((state,1) not in Q or ((state,0) in Q and Q[(state,0)] > Q[(state,1)]) ) else 1
+            for action in [0,1]:
                 p[(state,action)] = 1 - epl + epl / 2 if best_a_state == action else epl / 2
 
 
-
-
-
-
-
-
-
-
-
-
-
-nbIt=0
-done=False
-while not done:
-    observation, reward, done, info = env.step(np.random.randint(2))
-    env.render()
-    nbIt+=1
-print("Episode terminé après itérations".format(nbIt))
+MonteCarlo_OnPolicy_FirstVisit()
 env.close()
+
+
+
+
+
+
+
+
+
+
+
+
