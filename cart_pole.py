@@ -1,5 +1,7 @@
 import numpy as np
 import gym
+import matplotlib
+import matplotlib.pyplot as plt
 
 
 class cartPole():
@@ -46,6 +48,7 @@ class cartPole():
 
         '''
         Occ, Q, Acc, p = {}, {}, {}, {}
+        output = []
         for i in range(self.episodes):
             '''
                 play an episode 
@@ -62,9 +65,9 @@ class cartPole():
                 a = 0 if alt <= p[(s, 0)] else 1
                 observation, reward, done, info = self.env.step(a)
                 episode.append((s, a))
-                self.env.render()
+                #self.env.render()
                 nbIt += 1
-            print("Episode ", i, " terminé après itérations ", nbIt)
+            output.append(nbIt)
             state_visited = set()
             for t in range(len(episode)):
                 item = episode[t]
@@ -78,7 +81,7 @@ class cartPole():
                 best_a_state = 0 if ((state, 1) not in Q or ((state, 0) in Q and Q[(state, 0)] > Q[(state, 1)])) else 1
                 for action in self.A:
                     p[(state, action)] = 1 - epl + epl / 2 if best_a_state == action else epl / 2
-
+        return output
     def MonteCarlo_OnPolicy_EveryVisit(self, gam, epl):
         """
         Monte carlo algorithm with On-policy - First visit
@@ -93,6 +96,7 @@ class cartPole():
 
         '''
         Occ, Q, Acc, p = {}, {}, {}, {}
+        output = []
         for i in range(self.episodes):
             '''
                 play an episode 
@@ -109,9 +113,9 @@ class cartPole():
                 a = 0 if alt <= p[(s, 0)] else 1
                 observation, reward, done, info = self.env.step(a)
                 episode.append((s, a))
-                self.env.render()
+                #self.env.render()
                 nbIt += 1
-            print("Episode ", i, " terminé après itérations ", nbIt)
+            output.append(nbIt)
             state_visited = set()
             for t in range(len(episode)):
                 item = episode[t]
@@ -125,9 +129,11 @@ class cartPole():
                 best_a_state = 0 if ((state, 1) not in Q or ((state, 0) in Q and Q[(state, 0)] > Q[(state, 1)])) else 1
                 for action in [0, 1]:
                     p[(state, action)] = 1 - epl + epl / 2 if best_a_state == action else epl / 2
+        return output
 
     def sarsa_OnPolicy(self, alpha, gam, epl):
         Q = {}
+        output = []
         for i in range(self.episodes):
             done = False
             observation = self.env.reset()  # reset all variables to the initial state
@@ -152,9 +158,12 @@ class cartPole():
                 a = next_a
                 nbInt += 1
                 #self.env.render()
-            print("Episode ", i, " terminé après itérations ", nbInt)
+            output.append(nbInt)
+        return output
+
     def QLearning(self, alpha, gam, epl):
         Q = {}
+        output = []
         for i in range(self.episodes):
             done = False
             observation = self.env.reset()  # reset all variables to the initial state
@@ -179,24 +188,39 @@ class cartPole():
                 a = next_a
                 nbInt += 1
                 #self.env.render()
-            print("Episode ", i, " terminé après itérations ", nbInt)
+            output.append(nbInt)
+        return output
 
-
-
-
-
+    def plotAverageOfIterationsPerEpisode(self,results):
+        episodes = np.arange(0,len(results),50)
+        y = []
+        sum, count = 0, 0
+        for r in results:
+            count += 1
+            sum += r
+            if count == 50 :
+                y.append(sum/50)
+                sum, count = 0, 0
+        fig, ax = plt.subplots()
+        ax.plot(episodes, y)
+        ax.set(xlabel='episodes', ylabel='average iterations',
+               title='cart pole')
+        ax.grid()
+        fig.savefig("test.png")
+        plt.show()
 
 
 nval = 6
 N = nval ** 4
-episodes = 1000000
-gam = 0.1
+episodes = 100000
+gam = 0.3
 alpha = 0.1
 epl = 0.1
 cartPole = cartPole(nval,episodes)
-#cartPole.MonteCarlo_OnPolicy_EveryVisit(epl,gam)
+output = cartPole.MonteCarlo_OnPolicy_FirstVisit(epl,gam)
 #cartPole.sarsa_OnPolicy(alpha, gam, epl)
-cartPole.QLearning(alpha,gam,epl)
+#output = cartPole.QLearning(alpha,gam,epl)
+cartPole.plotAverageOfIterationsPerEpisode(output)
 cartPole.env.close()
 
 
