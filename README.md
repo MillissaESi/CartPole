@@ -11,6 +11,8 @@ First step is to represent the environment as a decisional markovian process:
  #### 1. Monte carlo “on-policy”:
 
 * I implemented both “First visit” and “Every visit” version, the plot below compares between the two algorithms by showing the average number of iterations (per 100 episodes) in a total of 100 K episodes. 
+
+![](/FirstVsEvery_100.png)
  
 Blue : First visit
 Orange: Every visit 
@@ -20,6 +22,7 @@ We notice that the average number of iterations for “Every visit” and “Fir
 
 * The second plot compares between different results of Monte Carlo “first visit” for different values of the discount factor. the discount factor is a measure of how far ahead in time the algorithm looks. To prioritise rewards in the distant future, we keep the value closer to one. 
 
+![](/gam.png)
 
 Blue: 0.6 -> purple -> red : 0.8  -> Orange -> Green: 1
 
@@ -31,6 +34,7 @@ In this part, we will compare between two TD algorithms: SARSA and Q-Learning. I
 
  * α  is the learning rate that gives a higher importance to the recent rewards compared to the old ones. 
  
+ ![](/sarsavsQlearning.png)
  
 Orange: Q-Learning
 Blue: SARSA
