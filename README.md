@@ -15,7 +15,9 @@ First step is to represent the environment as a decisional markovian process:
 ![](/FirstVsEvery_100.png)
  
 Blue : First visit
+
 Orange: Every visit 
+
 The discount factor is equal to 1
 
 We notice that the average number of iterations for “Every visit” and “First visit” algorithm increases quickly in the beginning. However, it takes a considerable time to converge to the optimum average number (v*). At the end, “First visit” algorithm shows better performances than “Every visit” version of Monte Carlo. It converges to an average of 160 iterations in 100 episodes. 
@@ -37,6 +39,7 @@ In this part, we will compare between two TD algorithms: SARSA and Q-Learning. I
  ![](/sarsavsQlearning.png)
  
 Orange: Q-Learning
+
 Blue: SARSA
 
 Clearly, Q-learning algorithms presents better results compared to SARSA implementation. The average iterations number for Q-Learning is 350 , contrary to SARSA that converges to almost 280 per 100 episodes. 
