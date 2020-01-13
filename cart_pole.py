@@ -1,6 +1,5 @@
 import numpy as np
 import gym
-import matplotlib
 import matplotlib.pyplot as plt
 
 
@@ -202,7 +201,7 @@ class cartPole():
         for r in results:
             count += 1
             sum += r
-            if count == 100 :
+            if count == 100:
                 y.append(sum/100)
                 sum, count = 0, 0
         fig, ax = plt.subplots()
