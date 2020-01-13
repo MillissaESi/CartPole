@@ -201,7 +201,7 @@ class cartPole():
         for r in results:
             count += 1
             sum += r
-            if count == 100:
+            if count == 100 :
                 y.append(sum/100)
                 sum, count = 0, 0
         fig, ax = plt.subplots()
@@ -273,6 +273,19 @@ cartPole.CompareAlgorithms([output_1,output_2])
 #output = cartPole.QLearning(alpha,gam,epl)
 #cartPole.plotAverageOfIterationsPerEpisode(output_2)
 cartPole.env.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
