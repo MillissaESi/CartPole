@@ -14,9 +14,8 @@ First step is to represent the environment as a decisional markovian process:
 
 ![](/FirstVsEvery_100.png)
  
-Blue : First visit
-
-Orange: Every visit 
+* Blue : First visit
+* Orange: Every visit 
 
 The discount factor is equal to 1
 
@@ -38,9 +37,8 @@ In this part, we will compare between two TD algorithms: SARSA and Q-Learning. I
  
  ![](/sarsavsQlearning.png)
  
-Orange: Q-Learning
-
-Blue: SARSA
+* Orange: Q-Learning
+* Blue: SARSA
 
 Clearly, Q-learning algorithms presents better results compared to SARSA implementation. The average iterations number for Q-Learning is 350 , contrary to SARSA that converges to almost 280 per 100 episodes. 
 
